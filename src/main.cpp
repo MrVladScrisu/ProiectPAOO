@@ -11,7 +11,7 @@ int main() {
     Dream v2 = v1;
 
     //Move constructor proof
-    Dream v3 = std::move(v1); // v1 devine golit; v3 fură resursa
+    Dream v3 = std::move(v1); // v1 devine gol, v3 preia resursele lui v1
 
     std::cout << "v2: " << v2.text() << " (size=" << v2.size() << ")\n";
     std::cout << "v3: " << v3.text() << " (size=" << v3.size() << ")\n";
