@@ -6,6 +6,5 @@
 - Move constructor (steal)
 
 ## Build (din directorul principal)
-cmake -S . -B build
-cmake --build build
+./cmake.sh 
 ./build/DreamPOC
