@@ -12,7 +12,6 @@ add_executable(DreamPOC
 
 target_include_directories(DreamPOC PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     if (MSVC)
         target_compile_options(DreamPOC PRIVATE /W4)

@@ -2,7 +2,7 @@
 #include <iostream>
 
 int main() {
-    std::cout << "=== Proof of Concept: VISE ===\n";
+    std::cout << "Proof of Concept: Dream\n";
 
     //Instantiem vis
     Dream v1("Am visat ca zbor peste o mare cu valuri.");
@@ -17,6 +17,6 @@ int main() {
     std::cout << "v3: " << v3.text() << " (size=" << v3.size() << ")\n";
     std::cout << "v1 (dupa move): \"" << v1.text() << "\" (size=" << v1.size() << ")\n";
 
-    std::cout << "=== Sfarsit POC ===\n";
+    std::cout << "Sfarsit POC\n";
     return 0;
 }
