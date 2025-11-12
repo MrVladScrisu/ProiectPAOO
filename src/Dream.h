@@ -1,70 +1,29 @@
 #pragma once
 #include <cstddef>
-#include <cstring>
 #include <iostream>
 
 class Dream {
     char* text_;
     std::size_t size_;
+    unsigned int id_;
+    static unsigned int next_id();
 
 public:
-    explicit Dream(const char* txt) : text_(nullptr), size_(0) {
-        std::cout << "[Dream] constructor(const char*)\n";
-        if (txt) {
-            size_ = std::strlen(txt);
-            text_ = new char[size_ + 1];
-            std::memcpy(text_, txt, size_ + 1);
-        }
-    }
+    explicit Dream(const char* txt);
+    Dream();
 
-    Dream() : text_(nullptr), size_(0) {
-        std::cout << "[Dream] default constructor\n";
-    }
+    // COPY
+    Dream(const Dream& other);
+    Dream& operator=(const Dream& other);
 
-    Dream(const Dream& other) : text_(nullptr), size_(other.size_) {
-        std::cout << "[Dream] copy constructor (deep copy)\n";
-        if (other.text_) {
-            text_ = new char[size_ + 1];
-            std::memcpy(text_, other.text_, size_ + 1);
-        }
-    }
+    // MOVE
+    Dream(Dream&& other) noexcept;
+    Dream& operator=(Dream&& other) noexcept;
 
-    Dream(Dream&& other) noexcept : text_(other.text_), size_(other.size_) {
-        std::cout << "[Dream] move constructor (steal)\n";
-        other.text_ = nullptr;
-        other.size_ = 0;
-    }
+    ~Dream();
 
-    Dream& operator=(const Dream& other) {
-        std::cout << "[Dream] copy assign\n";
-        if (this == &other) return *this;
-        delete[] text_;
-        size_ = other.size_;
-        if (other.text_) {
-            text_ = new char[size_ + 1];
-            std::memcpy(text_, other.text_, size_ + 1);
-        } else {
-            text_ = nullptr;
-        }
-        return *this;
-    }
-
-    Dream& operator=(Dream&& other) noexcept {
-        std::cout << "[Dream] move assign\n";
-        if (this == &other) return *this;
-        delete[] text_;
-        text_ = other.text_;
-        size_ = other.size_;
-        other.text_ = nullptr;
-        other.size_ = 0;
-        return *this;
-    }
-
-    ~Dream() {
-        std::cout << "[Dream] destructor -> delete[] text_\n";
-        delete[] text_;
-    }
-
-    const char* text() const { return text_ ? text_ : ""; }
-    std::size_t size() const { return size_; }
+    const char* text() const;
+    std::size_t size() const;
+    unsigned int id() const { return id_; }
+    void set_text(const char* txt);
 };

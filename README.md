@@ -1,5 +1,5 @@
 # DreamPOC (OOP – Proof of Concept)
-- Încapsulare (membri private + getteri)
+- Incapsulare (membri private + getteri)
 - Initializatori in constructori
 - Destructor care elibereaza heap
 - Copy constructor (deep copy)

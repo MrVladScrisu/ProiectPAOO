@@ -1,22 +1,26 @@
-#include "Dream.h"
+#include "DreamCalendar.h"
 #include <iostream>
 
 int main() {
-    std::cout << "Proof of Concept: Dream\n";
+    std::cout << "=== Dream Calendar (ID simplu) ===\n";
 
-    //Instantiem vis
+    DreamCalendar cal("Noiembrie");
+
     Dream v1("Am visat ca zbor peste o mare cu valuri.");
+    unsigned int id12 = cal.add_copy(mkdate(2025,11,12), v1); // COPY
 
-    //Copy constructor proof
-    Dream v2 = v1;
+    cal.add_move(mkdate(2025,11,13),
+                 Dream("Am visat un oras cu oglinzi infinite.")); // MOVE
 
-    //Move constructor proof
-    Dream v3 = std::move(v1); // v1 devine gol, v3 preia resursele lui v1
+    cal.list();
 
-    std::cout << "v2: " << v2.text() << " (size=" << v2.size() << ")\n";
-    std::cout << "v3: " << v3.text() << " (size=" << v3.size() << ")\n";
-    std::cout << "v1 (dupa move): \"" << v1.text() << "\" (size=" << v1.size() << ")\n";
+    cal.reschedule(mkdate(2025,11,12), id12, mkdate(2025,11,15)); // MOVE
 
-    std::cout << "Sfarsit POC\n";
+    auto newId = cal.duplicate(mkdate(2025,11,15), id12, mkdate(2025,11,20)); // COPY+MOVE
+    if (newId) std::cout << "Duplicated dream newId=" << *newId << "\n";
+
+    cal.list();
+
+    std::cout << "=== End ===\n";
     return 0;
 }
