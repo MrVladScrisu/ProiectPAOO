@@ -2,7 +2,7 @@
 #include <iostream>
 
 int main() {
-    std::cout << "=== Dream Calendar (ID simplu) ===\n";
+    std::cout << "=== Dream Calendar ===\n";
 
     DreamCalendar cal("Noiembrie");
 

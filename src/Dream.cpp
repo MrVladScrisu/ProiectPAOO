@@ -1,5 +1,6 @@
 #include "Dream.h"
 #include <cstring>
+#include <utility> 
 
 static unsigned int& id_counter() { static unsigned int c = 1; return c; }
 unsigned int Dream::next_id() { return id_counter()++; }
@@ -18,40 +19,44 @@ Dream::Dream() : text_(nullptr), size_(0), id_(next_id()) {
 }
 
 // COPY
-Dream::Dream(const Dream& other) : text_(nullptr), size_(other.size_), id_(next_id()) {
+Dream::Dream(const Dream& other): text_(nullptr), size_(other.size_), id_(other.id_){
+
     std::cout << "[Dream] copy constructor (deep copy)\n";
     if (other.text_) {
         text_ = new char[size_ + 1];
         std::memcpy(text_, other.text_, size_ + 1);
     }
 }
+
 Dream& Dream::operator=(const Dream& other) {
-    std::cout << "[Dream] copy assign\n";
-    if (this == &other) return *this;
-    delete[] text_;
-    size_ = other.size_;
-    if (other.text_) {
-        text_ = new char[size_ + 1];
-        std::memcpy(text_, other.text_, size_ + 1);
-    } else {
-        text_ = nullptr;
-    }
-    id_ = next_id();
-    return *this;
+    std::cout << "[Dream] copy assign (copy-and-swap)\n";
+    if (this == &other) return *this; // self-assignment check
+
+    Dream temp(other);
+    swap(temp); //schimb starea lui this cu copia temporara
+    return *this; 
 }
+
 
 // MOVE
 Dream::Dream(Dream&& other) noexcept : text_(other.text_), size_(other.size_), id_(other.id_) {
     std::cout << "[Dream] move constructor (steal)\n";
     other.text_ = nullptr; other.size_ = 0; other.id_ = 0;
 }
+
 Dream& Dream::operator=(Dream&& other) noexcept {
     std::cout << "[Dream] move assign\n";
-    if (this == &other) return *this;
-    delete[] text_;
-    text_ = other.text_; size_ = other.size_; id_ = other.id_;
-    other.text_ = nullptr; other.size_ = 0; other.id_ = 0;
+    if (this != &other) {
+        swap(other); // fur resursele si other ramane cu ce aveam noi
+    }
     return *this;
+}
+
+void Dream::swap(Dream& other) noexcept {
+    using std::swap;
+    swap(text_, other.text_);
+    swap(size_, other.size_);
+    swap(id_,   other.id_); 
 }
 
 Dream::~Dream() {

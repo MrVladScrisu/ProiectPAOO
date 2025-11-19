@@ -26,4 +26,7 @@ public:
     std::size_t size() const;
     unsigned int id() const { return id_; }
     void set_text(const char* txt);
+
+    // pentru copy-and-swap
+    void swap(Dream& other) noexcept;
 };

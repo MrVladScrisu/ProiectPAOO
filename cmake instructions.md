@@ -127,4 +127,48 @@ Dream v2 = v1; → declanșează copy ctor: vrem două vise independente, nu dou
 Dream v3 = std::move(v1); → declanșează move ctor: v3 ia bufferul lui v1; v1 devine „gol” (pointer nul). Eficient și sigur (nu mai copiem memoria).
 
 
+add_copy si add_move → sunt folosite cand vreau să adaug din afara (din main de ex). 
+
+
+Pentru item 10:
+
+Scenarii care nu merg fara item 10:
+La void operator=, lucruri de genul:
+a = b = c;       // NU mai merge, pentru că b = c NU întoarce nimic
+(a = b).size();  // NU merge, nu poți apela nimic pe rezultat
+
+
+La Dream operator=, se creează un nou obiect temporar:
+
+merge a = b = c;, dar:
+
+b = c întoarce o copie, nu referința la b;
+Se fac copii în plus (mai lent, mai multă memorie);
+(a = b).id() se aplică pe un temporar, nu neapărat pe a.
+
+Scenarii care merg ok cu item 10:
+Deci, cu acel return *this introdus, a = b = c;
+// interpretare: b = c întoarce referință la b,
+// apoi a = (b) -> tot ok
+
+(a = b).set_text("altceva");   // modifică direct a, fără temporare
+
+
+Pentru item 11:
+
+Am pus if (this == &other) return *this
+ca sa fie safe sa fac x = x, pentru ca daca nu e pus, si sa zic ca in operatorul de copy fac
+Dream& Dream::operator=(const Dream& other) {
+    delete[] text_;                  // 1) Șterg textul meu
+    text_ = new char[size_+1];       // 2) Copiez textul din OTHER
+    memcpy(text_, other.text_, ...); // 3) Copiez conținutul
+    return *this;
+}
+
+atunci ambele sunt acelasi obiect, deci sterg textul dintr-una si dupa incerc sa copiez textul din ea tot in ea, dar ea e aceiasi, deci se acceseaza o zona de memorie deja stearsa si corupem memoria. 
+Am adaugat si partea cu copia si cu swap pentru ca nu vreau sa ating obiectul tinta pana nu am o copie valida pentru ca poate Dream temp(other) arunca o exceptie (nu mai e memorie) si swap nu se mai executa, asa ca ii fac o copie prima data ca swap sa se execute sigur
+
+
+Pentru item 12:
+atat cu copy ctor unde se copiaza tot, cat cu in swap care schimba tot, copiez toti membrii si toate bazele in toate functiile
 

@@ -59,6 +59,7 @@ public:
         if (it == days_.end()) return std::nullopt;
         auto idx = index_of_id(it->second, dreamId);
         if (!idx) return std::nullopt;
+        
         Dream copy = it->second[*idx];        // COPY
         days_[toDay].push_back(std::move(copy)); // MOVE
         return days_[toDay].back().id();
